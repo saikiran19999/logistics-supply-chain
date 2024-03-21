@@ -1,8 +1,7 @@
-<!DOCTYPE html>
 <html lang="en">
 <?php 
 session_start();
-include('./db_connect.php');
+include('db_connect.php');
   ob_start();
   // if(!isset($_SESSION['system'])){
 
@@ -19,6 +18,7 @@ header("location:index.php?page=home");
 
 ?>
 <?php include 'header.php' ?>
+<!DOCTYPE html>
 <body class="hold-transition login-page">
 <div class="login-box" style="width: 30rem;hight: 30rem;">
   <div class="login-logo">
