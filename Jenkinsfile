@@ -1,11 +1,10 @@
 pipeline {
-  agent {
-    label "docker-agent"
-  }
+  agent any
+    
   stages {
     stage ('Run Docker Compose') {
       steps{
-        sh 'sudo docker-compose up -d'
+        bat 'docker-compose up -d'
       }
     }
   }
