@@ -4,7 +4,8 @@ pipeline {
   stages {
     stage ('Run Docker Compose') {
       steps{
-        bat 'docker-compose up -d'
+        sh 'docker-compose build'
+        sh 'docker-compose up -d'
       }
     }
   }
