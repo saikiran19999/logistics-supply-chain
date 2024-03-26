@@ -26,7 +26,8 @@ if ($result === false) {
     // Process the results
     while ($row = $result->fetch_assoc()) {
         // Process each row
-        echo "Column1: " . $row["column1"] . ", Column2: " . $row["column2"] . "<br>";
+        echo $row;
+        echo "Column1: " . $row["firstname"] . ", Column2: " . $row["lastname"] . "<br>";
     }
 }
 
