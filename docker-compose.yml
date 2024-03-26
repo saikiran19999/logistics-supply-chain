@@ -21,10 +21,10 @@ services:
       - ./database/cms_db.sql:/docker-entrypoint-initdb.d/cms_db.sql
       - persistent:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: ranjit
-      MYSQL_DATABASE: myDb
-      MYSQL_USER: ranjit
-      MYSQL_PASSWORD: ranjit
+      MYSQL_ROOT_PASSWORD: sai
+      MYSQL_DATABASE: cms_db
+      MYSQL_USER: sai
+      MYSQL_PASSWORD: sai
     ports:
       - 6033:3306
   phpmyadmin:
@@ -34,8 +34,8 @@ services:
     ports:
       - 82:80
     environment:
-      MYSQL_USER: ranjit
-      MYSQL_PASSWORD: ranjit
-      MYSQL_ROOT_PASSWORD: ranjit
+      MYSQL_USER: sai
+      MYSQL_PASSWORD: sai
+      MYSQL_ROOT_PASSWORD: sai
 volumes:
   persistent: null
