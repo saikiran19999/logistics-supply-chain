@@ -3,9 +3,9 @@
 $servername = "db";
 $username = "ranjit";
 $password = "ranjit";
-$db = "ranjit";
+$db = "cms_db";
 
-$conn = new mysqli('localhost','root','root','cms_db');
+$conn = new mysqli($servername,$username,$password,$db);
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
