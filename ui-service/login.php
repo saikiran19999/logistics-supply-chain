@@ -1,68 +1,33 @@
-<?php
-include "db_connect.php";
-
-session_start();
-
-#Login script is begin here
-#If user given credential matches successfully with the data available in database then we will echo string login_success
-#login_success string will go back to called Anonymous funtion $("#login").click() 
-
-if(isset($_POST["email"]) && isset($_POST["password"])){
-	$email = mysqli_real_escape_string($con,$_POST["email"]);
-	$password = $_POST["password"];
-	$sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
-	$run_query = mysqli_query($con,$sql);
-	$count = mysqli_num_rows($run_query);
-    $row = mysqli_fetch_array($run_query);
-		$_SESSION["uid"] = $row["id"];
-		$_SESSION["name"] = $row["first_name"];
-		$ip_add = getenv("REMOTE_ADDR");
-		//we have created a cookie in login_form.php page so if that cookie is available means user is not login
-        
-	//if user record is available in database then $count will be equal to 1
-	if($count == 1){
-		   	
-			if($count == 1){
-                $row = mysqli_fetch_array($run_query);
-                $_SESSION["uid"] = $row["id"];
-                $_SESSION["name"] = $row["first_name"];
-                $ip_add = getenv("REMOTE_ADDR");
-                //we have created a cookie in login_form.php page so if that cookie is available means user is not login
-
-
-                    //if user is login from page we will send login_success
-                    echo "login_success";
-
-                    echo "<script> location.href='home.php'; </script>";
-                    exit;
-
-                }else{
-                    echo "<span style='color:red;'>Please register before login..!</span>";
-                    exit();
-                }
-
-		}
-		else{
-                    echo "<span style='color:red;'>Please register before login..!</span>";
-                    exit();
-                }
-    
-	
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+session_start();
+include('db_connect.php');
+  ob_start();
+  // if(!isset($_SESSION['system'])){
+
+    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
+    foreach($system as $k => $v){
+      $_SESSION['system'][$k] = $v;
+    }
+  // }
+  ob_end_flush();
+?>
+<?php 
+if(isset($_SESSION['login_id']))
+header("location:index.php?page=home");
+
+?>
+<?php include 'header.php' ?>
 <body class="hold-transition login-page">
-<div class="login-box" style="width: 30rem;hight: 30rem;">
+<div class="login-box">
   <div class="login-logo">
-    <a href="#"><b><?php echo $_SESSION['system']['name'] ?></b></a>
+    <a href="#"><b><?php echo $_SESSION['system']['name'] ?> - Admin</b></a>
   </div>
   <!-- /.login-logo -->
-  <div class="card" style="width: 30rem;hight: 30rem;">
+  <div class="card">
     <div class="card-body login-card-body">
-      <form action="" method="post" id="login-form">
+      <form action="" id="login-form">
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="email" required placeholder="Email">
           <div class="input-group-append">
@@ -79,9 +44,6 @@ if(isset($_POST["email"]) && isset($_POST["password"])){
             </div>
           </div>
         </div>
-        <?php if(isset($error)) { ?>
-            <div class="alert alert-danger"><?php echo $error; ?></div>
-        <?php } ?>
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
@@ -92,8 +54,8 @@ if(isset($_POST["email"]) && isset($_POST["password"])){
             </div>
           </div>
           <!-- /.col -->
-          <div class="col-10">
-            <button type="submit" class="btn btn-primary">Sign In</button>
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
@@ -103,8 +65,35 @@ if(isset($_POST["email"]) && isset($_POST["password"])){
   </div>
 </div>
 <!-- /.login-box -->
+<script>
+  $(document).ready(function(){
+    $('#login-form').submit(function(e){
+    e.preventDefault()
+    start_load()
+    if($(this).find('.alert-danger').length > 0 )
+      $(this).find('.alert-danger').remove();
+    $.ajax({
+      url:'ajax.php?action=login',
+      method:'POST',
+      data:$(this).serialize(),
+      error:err=>{
+        console.log(err)
+        end_load();
 
-<?php include 'footer.php'; ?>
+      },
+      success:function(resp){
+        if(resp == 1){
+          location.href ='index.php?page=home';
+        }else{
+          $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
+          end_load();
+        }
+      }
+    })
+  })
+  })
+</script>
+<?php include 'footer.php' ?>
 
 </body>
 </html>
