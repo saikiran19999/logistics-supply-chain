@@ -1,29 +1,21 @@
 <?php 
 session_start();
 include('db_connect.php');
+  ob_start();
+  // if(!isset($_SESSION['system'])){
 
-// Check if the login form is submitted
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the username and password from the POST request
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    
-    // Perform the login validation here (replace this with your actual validation logic)
-    // For demonstration purposes, let's assume the username is "admin" and the password is "admin123"
-    if ($email == 'admin' && $password == 'admin123') {
-        // Set session variables to indicate that the user is logged in
-        $_SESSION['login_id'] = 1; // Assuming 1 as the login ID
-        
-        // Redirect the user to the home page
-        header("location: index.php?page=home");
-        exit(); // Stop further execution
-    } else {
-        // Invalid username or password
-        echo '<div class="alert alert-danger">Username or password is incorrect.</div>';
+    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
+    foreach($system as $k => $v){
+      $_SESSION['system'][$k] = $v;
     }
-}
+  // }
+  ob_end_flush();
 ?>
+<?php 
+if(isset($_SESSION['login_id']))
+header("location:index.php?page=home");
 
+?>
 <?php include 'header.php' ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <!-- /.login-logo -->
   <div class="card" style="width: 30rem;hight: 30rem;">
     <div class="card-body login-card-body">
-      <form action="" id="login-form" method="post"> <!-- Add method="post" -->
+      <form action="" id="login-form">
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="email" required placeholder="Email">
           <div class="input-group-append">
@@ -93,7 +85,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if(resp == 1){
           location.href ='index.php?page=home';
         }else{
-          location.href ='index.php?page=home';
+          $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
+          end_load();
         }
       }
     })
