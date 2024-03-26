@@ -1,34 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php 
 session_start();
-include('db_connect.php');
-ob_start();
-// if(!isset($_SESSION['system'])){
-$system_query = $conn->query("SELECT * FROM system_settings");
-if ($system_query) {
-    $system = $system_query->fetch_array();
-    if ($system) {
-        foreach($system as $k => $v){
-            $_SESSION['system'][$k] = $v;
-        }
-    } else {
-        // Handle case where no rows are returned
-        echo "No system settings found!";
+include('./db_connect.php');
+  ob_start();
+  // if(!isset($_SESSION['system'])){
+
+    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
+    foreach($system as $k => $v){
+      $_SESSION['system'][$k] = $v;
     }
-} else {
-    // Handle query execution error
-    echo "Error executing system settings query: " . $conn->error;
-}
-// }
-ob_end_flush();
+  // }
+  ob_end_flush();
 ?>
-<html lang="en">
-if(isset($_SESSION['login_id'])) {
-    header("location:index.php?page=home");
-    exit; // It's a good practice to include exit after redirection to stop further execution
-}
+<?php 
+if(isset($_SESSION['login_id']))
+header("location:index.php?page=home");
+
 ?>
 <?php include 'header.php' ?>
-<!DOCTYPE html>
 <body class="hold-transition login-page">
 <div class="login-box" style="width: 30rem;hight: 30rem;">
   <div class="login-logo">
