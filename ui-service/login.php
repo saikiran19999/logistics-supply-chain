@@ -80,7 +80,7 @@ $(document).ready(function(){
         end_load();
       },
       success:function(resp){
-        if(resp == 2){
+        if(resp == 1){
           location.href ='index.php?page=home';
         }else{
           $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>');
