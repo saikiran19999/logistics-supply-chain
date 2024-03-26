@@ -1,6 +1,6 @@
 <?php
 
-$hostname = 'db'; // This should be the name of the MySQL service defined in your Docker Compose file
+$hostname = 'ranjit'; // This should be the name of the MySQL service defined in your Docker Compose file
 $username = 'ranjit'; // MySQL username
 $password = 'ranjit'; // MySQL password
 $database = 'ranjit'; // MySQL database name
