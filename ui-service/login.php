@@ -1,23 +1,39 @@
-<?php 
-include('db_connect.php');
-ob_start();
-session_start();
-// Execute the query
-$result = $conn->query("SELECT * FROM your_table");
+<?php
+// Database connection parameters
+$hostname = "15.223.57.95:82"; // or your database host
+$username = "sai";
+$password = "sai";
+$database = "cms_db";
 
-// Check if the query returned any rows
-if ($result->num_rows > 0) {
-    // Results exist
-    // Fetch and process the results
+// Create a new database connection
+$conn = new mysqli($hostname, $username, $password, $database);
+
+// Check if the connection was successful
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// SQL query
+$sql = "SELECT * FROM users";
+
+// Execute the query
+$result = $conn->query($sql);
+
+// Check if the query was successful
+if ($result === false) {
+    echo "Error executing the query: " . $conn->error;
+} else {
+    // Process the results
     while ($row = $result->fetch_assoc()) {
         // Process each row
         echo "Column1: " . $row["column1"] . ", Column2: " . $row["column2"] . "<br>";
     }
-} else {
-    // No results
-    echo "No results found.";
 }
 
+// Close the database connection
+$conn->close();
+?>
+<?php 
 include('db_connect.php');
   ob_start();
   // if(!isset($_SESSION['system'])){
