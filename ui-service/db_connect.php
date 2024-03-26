@@ -1,9 +1,9 @@
 <?php
 
 $servername = "db";
-$username = "ranjit";
-$password = "ranjit";
-$db = "myDb";
+$username = "sai";
+$password = "sai";
+$db = "cms_db";
 
 $conn = new mysqli($servername,$username,$password,$db);
 
