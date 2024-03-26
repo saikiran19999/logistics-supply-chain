@@ -1,24 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php 
 session_start();
 include('db_connect.php');
-  ob_start();
-  // if(!isset($_SESSION['system'])){
-
-    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-    foreach($system as $k => $v){
-      $_SESSION['system'][$k] = $v;
-    }
-  // }
-  ob_end_flush();
+ob_start();
+$system = $conn->query("SELECT * FROM system_settings")->fetch_assoc();
+foreach($system as $k => $v){
+  $_SESSION['system'][$k] = $v;
+}
+ob_end_flush();
 ?>
 <?php 
-if(isset($_SESSION['login_id']))
-header("location:index.php?page=home");
-
+if(isset($_SESSION['login_id'])) {
+  header("location:index.php?page=home");
+  exit; // Stop further execution to prevent redirection issues
+}
 ?>
-<?php include 'header.php' ?>
+<?php include 'header.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
@@ -27,7 +25,7 @@ header("location:index.php?page=home");
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <form action="" id="login-form">
+      <form id="login-form">
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="email" required placeholder="Email">
           <div class="input-group-append">
@@ -66,33 +64,33 @@ header("location:index.php?page=home");
 </div>
 <!-- /.login-box -->
 <script>
-  $(document).ready(function(){
-    $('#login-form').submit(function(e){
-    e.preventDefault()
-    start_load()
-    if($(this).find('.alert-danger').length > 0 )
+$(document).ready(function(){
+  $('#login-form').submit(function(e){
+    e.preventDefault();
+    start_load();
+    if($(this).find('.alert-danger').length > 0) {
       $(this).find('.alert-danger').remove();
+    }
     $.ajax({
       url:'ajax.php?action=login',
       method:'POST',
       data:$(this).serialize(),
-      error:err=>{
-        console.log(err)
+      error: function(err){
+        console.log(err);
         end_load();
-
       },
       success:function(resp){
         if(resp == 1){
           location.href ='index.php?page=home';
         }else{
-          location.href ='index.php?page=home';
+          $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>');
+          end_load();
         }
       }
-    })
-  })
-  })
+    });
+  });
+});
 </script>
-<?php include 'footer.php' ?>
-
+<?php include 'footer.php'; ?>
 </body>
 </html>
