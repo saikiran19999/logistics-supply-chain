@@ -1,5 +1,21 @@
 <?php 
 session_start();
+// Execute the query
+$result = $conn->query("SELECT * FROM your_table");
+
+// Check if the query returned any rows
+if ($result->num_rows > 0) {
+    // Results exist
+    // Fetch and process the results
+    while ($row = $result->fetch_assoc()) {
+        // Process each row
+        echo "Column1: " . $row["column1"] . ", Column2: " . $row["column2"] . "<br>";
+    }
+} else {
+    // No results
+    echo "No results found.";
+}
+
 include('db_connect.php');
   ob_start();
   // if(!isset($_SESSION['system'])){
