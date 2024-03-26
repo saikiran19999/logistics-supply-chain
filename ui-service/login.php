@@ -1,12 +1,13 @@
 <?php
 // Database connection parameters
 $hostname = "15.223.57.95:82"; // or your database host
+$port = '82';
 $username = "sai";
 $password = "sai";
 $database = "cms_db";
 
 // Create a new database connection
-$conn = new mysqli($hostname, $username, $password, $database);
+$conn = new mysqli($hostname, $username, $password, $database, $port);
 
 // Check if the connection was successful
 if ($conn->connect_error) {
