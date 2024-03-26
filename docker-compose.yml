@@ -22,9 +22,9 @@ services:
       - persistent:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: cms_db
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: database
+      MYSQL_USER: edureka
+      MYSQL_PASSWORD: admin
     ports:
       - 6033:3306
   phpmyadmin:
@@ -34,8 +34,8 @@ services:
     ports:
       - 82:80
     environment:
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_USER: edureka
+      MYSQL_PASSWORD: admin
       MYSQL_ROOT_PASSWORD: root
 volumes:
   persistent: null
