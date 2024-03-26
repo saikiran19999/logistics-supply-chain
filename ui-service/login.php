@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php 
 session_start();
 include('./db_connect.php');
@@ -19,6 +17,8 @@ header("location:index.php?page=home");
 
 ?>
 <?php include 'header.php' ?>
+<!DOCTYPE html>
+<html lang="en">
 <body class="hold-transition login-page">
 <div class="login-box" style="width: 30rem;hight: 30rem;">
   <div class="login-logo">
