@@ -81,7 +81,7 @@ $(document).ready(function(){
       },
       success:function(resp){
         if(resp == 2){
-          location.href ='index.php?page=home';
+          location.href ='ui-service/index.php?page=home';
         }else{
           $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>');
           end_load();
