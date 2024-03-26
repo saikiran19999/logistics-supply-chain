@@ -22,9 +22,10 @@ if ($system_query) {
 ob_end_flush();
 ?>
 <html lang="en">
-if(isset($_SESSION['login_id']))
-header("location:index.php?page=home");
-
+if(isset($_SESSION['login_id'])) {
+    header("location:index.php?page=home");
+    exit; // It's a good practice to include exit after redirection to stop further execution
+}
 ?>
 <?php include 'header.php' ?>
 <!DOCTYPE html>
