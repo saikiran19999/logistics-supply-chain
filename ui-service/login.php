@@ -1,45 +1,9 @@
-<?php
-// Database connection parameters
-$hostname = "db"; // or your database host
-$username = "sai";
-$password = "sai";
-$database = "cms_db";
-
-// Create a new database connection
-$conn = new mysqli($hostname, $username, $password, $database);
-
-// Check if the connection was successful
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// SQL query
-$sql = "SELECT * FROM users";
-
-// Execute the query
-$result = $conn->query($sql);
-
-// Check if the query was successful
-if ($result === false) {
-    echo "Error executing the query: " . $conn->error;
-} else {
-    // Process the results
-    while ($row = $result->fetch_assoc()) {
-        // Process each row
-        echo $row;
-        echo "Column1: " . $row["firstname"] . ", Column2: " . $row["lastname"] . "<br>";
-    }
-}
-
-// Close the database connection
-$conn->close();
-?>
 <?php 
 include('db_connect.php');
   ob_start();
   // if(!isset($_SESSION['system'])){
 
-    $system = $conn->query("SELECT * FROM users")->fetch_array();
+    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
     foreach($system as $k => $v){
       $_SESSION['system'][$k] = $v;
     }
