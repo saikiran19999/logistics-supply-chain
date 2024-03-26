@@ -1,22 +1,37 @@
 <?php 
 include('db_connect.php');
 session_start();
-ob_start();
-  // if(!isset($_SESSION['system'])){
 
-    $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
-    foreach($system as $k => $v){
-      $_SESSION['system'][$k] = $v;
+if(isset($_SESSION['login_id'])) {
+    header("location:index.php?page=home");
+    exit; // Stop execution to prevent further processing
+}
+
+// Check if the login form is submitted
+if(isset($_POST['email']) && isset($_POST['password'])) {
+    // Sanitize input to prevent SQL injection
+    $email = $conn->real_escape_string($_POST['email']);
+    $password = $conn->real_escape_string($_POST['password']);
+
+    // Perform user authentication
+    $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+    $result = $conn->query($query);
+
+    if($result && $result->num_rows > 0) {
+        // Authentication successful
+        $user = $result->fetch_assoc();
+        $_SESSION['login_id'] = $user['id']; // Assuming 'id' is the primary key of the users table
+        header("location:index.php?page=home");
+        exit; // Stop execution to prevent further processing
+    } else {
+        // Authentication failed
+        $error = "Invalid email or password.";
     }
-  // }
-  ob_end_flush();
-?>
-<?php 
-if(isset($_SESSION['login_id']))
-header("location:index.php?page=home");
+}
 
+include 'header.php';
 ?>
-<?php include 'header.php' ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <body class="hold-transition login-page">
@@ -27,7 +42,7 @@ header("location:index.php?page=home");
   <!-- /.login-logo -->
   <div class="card" style="width: 30rem;hight: 30rem;">
     <div class="card-body login-card-body">
-      <form action="" id="login-form">
+      <form action="" method="post" id="login-form">
         <div class="input-group mb-3">
           <input type="email" class="form-control" name="email" required placeholder="Email">
           <div class="input-group-append">
@@ -44,6 +59,9 @@ header("location:index.php?page=home");
             </div>
           </div>
         </div>
+        <?php if(isset($error)) { ?>
+            <div class="alert alert-danger"><?php echo $error; ?></div>
+        <?php } ?>
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
@@ -65,35 +83,8 @@ header("location:index.php?page=home");
   </div>
 </div>
 <!-- /.login-box -->
-<script>
-  $(document).ready(function(){
-    $('#login-form').submit(function(e){
-    e.preventDefault()
-    start_load()
-    if($(this).find('.alert-danger').length > 0 )
-      $(this).find('.alert-danger').remove();
-    $.ajax({
-      url:'ajax.php?action=login',
-      method:'POST',
-      data:$(this).serialize(),
-      error:err=>{
-        console.log(err)
-        end_load();
 
-      },
-      success:function(resp){
-        if(resp == 1){
-          location.href ='index.php?page=home';
-        }else{
-          $('#login-form').prepend('<div class="alert alert-danger">Username or password is incorrect.</div>')
-          end_load();
-        }
-      }
-    })
-  })
-  })
-</script>
-<?php include 'footer.php' ?>
+<?php include 'footer.php'; ?>
 
 </body>
 </html>
