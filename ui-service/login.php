@@ -1,35 +1,55 @@
-<?php 
-include('db_connect.php');
+<?php
+include "db_connect.php";
+
 session_start();
 
-if(isset($_SESSION['login_id'])) {
-    header("location:index.php?page=home");
-    exit; // Stop execution to prevent further processing
+#Login script is begin here
+#If user given credential matches successfully with the data available in database then we will echo string login_success
+#login_success string will go back to called Anonymous funtion $("#login").click() 
+
+if(isset($_POST["email"]) && isset($_POST["password"])){
+	$email = mysqli_real_escape_string($con,$_POST["email"]);
+	$password = $_POST["password"];
+	$sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+	$run_query = mysqli_query($con,$sql);
+	$count = mysqli_num_rows($run_query);
+    $row = mysqli_fetch_array($run_query);
+		$_SESSION["uid"] = $row["id"];
+		$_SESSION["name"] = $row["first_name"];
+		$ip_add = getenv("REMOTE_ADDR");
+		//we have created a cookie in login_form.php page so if that cookie is available means user is not login
+        
+	//if user record is available in database then $count will be equal to 1
+	if($count == 1){
+		   	
+			if($count == 1){
+                $row = mysqli_fetch_array($run_query);
+                $_SESSION["uid"] = $row["id"];
+                $_SESSION["name"] = $row["first_name"];
+                $ip_add = getenv("REMOTE_ADDR");
+                //we have created a cookie in login_form.php page so if that cookie is available means user is not login
+
+
+                    //if user is login from page we will send login_success
+                    echo "login_success";
+
+                    echo "<script> location.href='home.php'; </script>";
+                    exit;
+
+                }else{
+                    echo "<span style='color:red;'>Please register before login..!</span>";
+                    exit();
+                }
+
+		}
+		else{
+                    echo "<span style='color:red;'>Please register before login..!</span>";
+                    exit();
+                }
+    
+	
 }
 
-// Check if the login form is submitted
-if(isset($_POST['email']) && isset($_POST['password'])) {
-    // Sanitize input to prevent SQL injection
-    $email = $conn->real_escape_string($_POST['email']);
-    $password = $conn->real_escape_string($_POST['password']);
-
-    // Perform user authentication
-    $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
-    $result = $conn->query($query);
-
-    if($result && $result->num_rows > 0) {
-        // Authentication successful
-        $user = $result->fetch_assoc();
-        $_SESSION['login_id'] = $user['id']; // Assuming 'id' is the primary key of the users table
-        header("location:index.php?page=home");
-        exit; // Stop execution to prevent further processing
-    } else {
-        // Authentication failed
-        $error = "Invalid email or password.";
-    }
-}
-
-include 'header.php';
 ?>
 
 <!DOCTYPE html>
