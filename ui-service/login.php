@@ -1,4 +1,6 @@
 <?php 
+include('db_connect.php');
+ob_start();
 session_start();
 // Execute the query
 $result = $conn->query("SELECT * FROM your_table");
