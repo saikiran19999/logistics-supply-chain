@@ -1,6 +1,7 @@
 <?php 
 include('db_connect.php');
-  ob_start();
+session_start();
+ob_start();
   // if(!isset($_SESSION['system'])){
 
     $system = $conn->query("SELECT * FROM system_settings")->fetch_array();
